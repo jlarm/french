@@ -8,6 +8,9 @@
   --olive: #76805b;
   --coral: #ff7a59;
   --sky: #b6d7f5;
+  --tricolor-blue: #1b3f8b;
+  --tricolor-white: #f7f4ef;
+  --tricolor-red: #c73a3a;
 }
 
 @theme inline {
@@ -25,7 +28,7 @@
 }
 
 body {
-  background: var(--sand);
+  background: var(--tricolor-white);
   color: var(--ink);
   font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", sans-serif;
