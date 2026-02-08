@@ -1,0 +1,17 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="French Flow">
+  <defs>
+    <linearGradient id="stripe" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1b3f8b"/>
+      <stop offset="33.333%" stop-color="#1b3f8b"/>
+      <stop offset="33.333%" stop-color="#f7f4ef"/>
+      <stop offset="66.666%" stop-color="#f7f4ef"/>
+      <stop offset="66.666%" stop-color="#c73a3a"/>
+      <stop offset="100%" stop-color="#c73a3a"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="120" fill="url(#stripe)"/>
+  <circle cx="256" cy="256" r="150" fill="#ffffff" opacity="0.9"/>
+  <text x="256" y="286" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="140" fill="#101014" font-weight="700">
+    FR
+  </text>
+</svg>
