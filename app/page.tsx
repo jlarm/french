@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { QUIZ_ITEMS, type QuizLevel } from "./quizData";
+import { QUIZ_ITEMS, type QuizLevel, type QuizTopic } from "./quizData";
 
 type Level = "all" | QuizLevel;
+type Topic = "all" | QuizTopic;
 type Mode = "typing" | "choice";
 
 function normalizeAnswer(text: string) {
@@ -19,6 +20,7 @@ function normalizeAnswer(text: string) {
 
 export default function Home() {
   const [level, setLevel] = useState<Level>("all");
+  const [topic, setTopic] = useState<Topic>("all");
   const [mode, setMode] = useState<Mode>("typing");
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState("");
@@ -27,10 +29,18 @@ export default function Home() {
   const [stats, setStats] = useState({ correct: 0, total: 0, streak: 0 });
   const [choices, setChoices] = useState<string[]>([]);
 
+  const topics = useMemo(() => {
+    const set = new Set(QUIZ_ITEMS.map((item) => item.topic));
+    return ["all", ...Array.from(set).sort()] as Topic[];
+  }, []);
+
   const filtered = useMemo(() => {
-    if (level === "all") return QUIZ_ITEMS;
-    return QUIZ_ITEMS.filter((item) => item.level === level);
-  }, [level]);
+    return QUIZ_ITEMS.filter((item) => {
+      const levelMatch = level === "all" || item.level === level;
+      const topicMatch = topic === "all" || item.topic === topic;
+      return levelMatch && topicMatch;
+    });
+  }, [level, topic]);
 
   const current = filtered[index % Math.max(filtered.length, 1)];
 
@@ -39,7 +49,7 @@ export default function Home() {
     setAnswer("");
     setStatus("idle");
     setRevealed(false);
-  }, [level]);
+  }, [level, topic]);
 
   const totalItems = filtered.length;
 
@@ -119,9 +129,10 @@ export default function Home() {
       setChoices([]);
       return;
     }
-    const pool = QUIZ_ITEMS.filter((item) => item.id !== current.id).map(
-      (item) => item.french
-    );
+    const poolSource = filtered.length >= 4 ? filtered : QUIZ_ITEMS;
+    const pool = poolSource
+      .filter((item) => item.id !== current.id)
+      .map((item) => item.french);
     const selections: string[] = [current.french];
     while (selections.length < 4 && pool.length > 0) {
       const pickIndex = Math.floor(Math.random() * pool.length);
@@ -155,6 +166,21 @@ export default function Home() {
                   level === option
                     ? "border-[#101014] bg-[#101014] text-white shadow-[0_10px_20px_rgba(16,16,20,0.2)]"
                     : "border-[#d7d1c7] bg-white text-[#3b3b45] hover:border-[#101014]"
+                }`}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-3">
+            {topics.map((option) => (
+              <button
+                key={option}
+                onClick={() => setTopic(option)}
+                className={`rounded-full border px-5 py-2 text-sm font-semibold capitalize transition-all ${
+                  topic === option
+                    ? "border-[#76805b] bg-[#e7efe9] text-[#3d4b2e] shadow-[0_10px_20px_rgba(61,75,46,0.18)]"
+                    : "border-[#d7d1c7] bg-white text-[#3b3b45] hover:border-[#76805b]"
                 }`}
               >
                 {option}
